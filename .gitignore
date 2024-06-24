@@ -1,0 +1,6 @@
+*.pth
+*.csv
+genellmapp/
+venv/
+myenv/
+*.sh
