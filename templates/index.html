@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gene and Disease Similarity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="{{ url_for('static', filename='logo1.jpg') }}" alt="Lab Logo" class="logo">
+            <h1>Gene-Disease Association</h1>
+        </header>
+        <form action="/predict" method="POST">
+            <div class="input-methods">
+                <div class="input-method">
+                    <h2>Enter Text</h2>
+                    <textarea name="text" placeholder="Enter gene or disease summary text here..."></textarea>
+                </div>
+                <div class="input-method">
+                    <h2>Or Select from Dropdown</h2>
+                    <label for="type">Select Type:</label>
+                    <select id="type" name="type">
+                        <option value="gene">Gene</option>
+                        <option value="disease">Disease</option>
+                    </select>
+                    <label for="name">Select Name:</label>
+                    <select id="name" name="name">
+                        
+                    </select>
+                </div>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeSelect = document.getElementById('type');
+            const nameSelect = document.getElementById('name');
+            const geneNames = {{ gene_names | safe }};
+            const diseaseNames = {{ disease_names | safe }};
+
+            function populateNames(names) {
+                nameSelect.innerHTML = '';
+                names.forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    nameSelect.appendChild(option);
+                });
+            }
+
+            typeSelect.addEventListener('change', function() {
+                if (typeSelect.value === 'gene') {
+                    populateNames(geneNames);
+                } else {
+                    populateNames(diseaseNames);
+                }
+            });
+
+            // Initial population of gene names
+            populateNames(geneNames);
+        });
+    </script>
+</body>
+</html>
