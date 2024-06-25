@@ -59,7 +59,7 @@ button {
     border: none;
     cursor: pointer;
     align-self: center;
-    border-radius: 10px; /* Add this line to make the button corners rounded */
+    border-radius: 10px; 
 }
 
 button:hover {
@@ -73,6 +73,13 @@ label {
 select, textarea {
     padding: 10px;
     border: 1px solid #ddd;
+}
+
+select {
+    max-width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 ul {
