@@ -14,5 +14,5 @@ services:
               - /data/GENELLM_WEBAPP/:/home/tailab/genellm_backend
               - /data/web_data/:/home/tailab/data
          restart: always
-         entrypoint: ["/bin/bash","-c","cd /home/tailab/genellm_backend/code && python3 app.py"]
+         entrypoint: ["/bin/bash","-c","cd /home/tailab/genellm_backend/code && python app.py"]
 
