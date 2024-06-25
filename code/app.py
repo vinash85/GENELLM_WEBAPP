@@ -112,13 +112,13 @@ def load_model_with_filtered_state_dict(model_class, state_dict_path, device):
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-gene_embeddings = pd.read_csv('gene_embeddings.csv')
-disease_embeddings = pd.read_csv('disease_embeddings.csv')
+gene_embeddings = pd.read_csv('/home/tailab/data/gene_embeddings.csv')
+disease_embeddings = pd.read_csv('/home/tailab/data/disease_embeddings.csv')
 
 gene_names = gene_embeddings['Gene name'].tolist()
 disease_names = disease_embeddings['Disease'].tolist()
 
-model = load_model_with_filtered_state_dict(FineTunedBERT, 'state_dict_0.pth', device)
+model = load_model_with_filtered_state_dict(FineTunedBERT, '/home/tailab/data/state_dict_0.pth', device)
 model.eval()
 
 def compute_embeddings(text, model, max_length=512, batch_size=16):
@@ -196,4 +196,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=False,host='0.0.0.0', port=5000)
