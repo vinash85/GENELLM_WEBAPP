@@ -1,0 +1,18 @@
+#version: "1"
+
+services:
+  genellmweb:
+         build: .
+         image: genellmweb
+         container_name: genellmweb
+         privileged: true
+         ports:
+              - "5000:5000"
+         expose:
+              - "5000"
+         volumes:
+              - /data/GENELLM_WEBAPP/:/home/tailab/genellm_backend
+              - /data/web_data/:/home/tailab/data
+         restart: always
+         entrypoint: ["/bin/bash","-c","cd /home/tailab/genellm_backend/code && python3 app.py"]
+
