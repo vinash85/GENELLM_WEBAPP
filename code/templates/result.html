@@ -1,27 +1,244 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}LitGENE Predicted Results{% endblock %}
+
+{% block content %}
+
+<section id="hero_home" class="min-vh-100 d-flex align-items-center text-center">
     <div class="container">
-        <h1>Top 10 Similar Genes and Diseases</h1>
-        <h2>Top 10 Genes</h2>
-        <ul>
-            {% for gene in top_genes %}
-            <li>{{ gene }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Top 10 Diseases</h2>
-        <ul>
-            {% for disease in top_diseases %}
-            <li>{{ disease }}</li>
-            {% endfor %}
-        </ul>
-        <a href="/">Go Back</a>
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3" data-aos="fade-up"><strong>LitGene</strong></h1>
+          <p data-aos="fade-left" class="text-white font-weight-semibold">Gene-Disease-Drug Association.</p>
+
+        </div>
+      </div>
     </div>
-</body>
-</html>
+  </section>
+  
+<section id="results" class="py-5">
+  <div class="container">
+    <h1 class="text-center mb-4 text-primary">LitGENE Predicted Results</h1>
+
+    <!-- Prompt Display -->
+    <div class="results-section mb-5">
+      <h2>Prompt:</h2>
+      <p class="font-italic">{{ text }}</p>
+    </div>
+
+    <!-- Top 10 Associated Genes -->
+    <div class="results-section mb-5">
+      <h2>Top 10 Associated Genes</h2>
+      <p class="font-italic">
+        These are the top 10 genes most closely associated with the input prompt according to LitGENE, ranked in descending order.
+      </p>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="thead-light">
+            <tr>
+                <th>Gene <span class="tooltip"><span class="circle-question">?</span>
+                    <span class="tooltiptext">The name of the top 10 predicted associated genes.</span>
+                </span></th>
+                <th>Similarity Score <span class="tooltip"><span class="circle-question">?</span>
+                    <span class="tooltiptext">The similarity score shows how closely your input prompt matches the target gene in context. This is calculated by converting both the input prompt and gene descriptions into embeddings (mathematical representations) and then measuring the cosine similarity between them. A higher score means a stronger match. Scores between 0.7 and 0.8 are considered high.</span>
+                </span></th>
+                <th>Find Citation <span class="tooltip"><span class="circle-question">?</span>
+                    <span class="tooltiptext">This feature links to relevant citations connecting the gene to your input prompt. Our AI searches through 300,000 PubMed articles by embedding your input, the gene description, and the abstracts. It then displays the PubMed articles that are most similar to both your input and the gene.</span>
+                </span></th>
+                <th>Check input word importance <span class="tooltip"><span class="circle-question">?</span>
+                    <span class="tooltiptext">This experimental feature shows the contribution of specific words in your prompt to the prediction. It approximates word importance by calculating the cosine similarity between the embeddings of each word in the prompt and the context embedding with prediction. While it is less accurate than post-hoc interpretability methods, which are not provided due to computational limitations, it still offers insights. For a more accurate word importance estimation, please contact us at asahu@salud.unm.edu, and we will be happy to assist.</span>
+                </span></th>
+                <th>Analyze with LitGENE <span class="tooltip"><span class="circle-question">?</span>
+                    <span class="tooltiptext">Analyze the gene using the LitGENE model.</span>
+                </span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for gene, score in top_genes_data %}
+            <tr>
+              <td>
+                <a href="https://www.ensembl.org/Homo_sapiens/Gene/Summary?g={{ gene }}" target="_blank">{{ gene }}</a>
+              </td>
+              <td class="{% if score > 0.65 %}text-success{% elif score > 0.5 %}text-warning{% else %}text-danger{% endif %}">
+                {{ (score * 100) | round(2) }}%
+              </td>
+              <td>
+                <form action="{{ url_for('find_citation') }}" method="post" onsubmit="showSpinner(true, '{{ gene }}')">
+                  <input type="hidden" name="text" value="{{ text }}">
+                  <input type="hidden" name="target_name" value="{{ gene }}">
+                  <input type="hidden" name="target_type" value="gene">
+                  <button type="submit" class="btn btn-info btn-sm">Find Citation</button>
+                </form>
+              </td>
+              <td>
+                <form action="{{ url_for('word_importance') }}" method="post" onsubmit="showSpinner(false)">
+                  <input type="hidden" name="text" value="{{ text }}">
+                  <input type="hidden" name="target_name" value="{{ gene }}">
+                  <input type="hidden" name="target_type" value="gene">
+                  <button type="submit" class="btn btn-warning btn-sm">Word Importance</button>
+                </form>
+              </td>
+              <td>
+                <form action="{{ url_for('analyze') }}" method="post" target="_blank">
+                  <input type="hidden" name="target_name" value="{{ gene }}">
+                  <input type="hidden" name="target_type" value="gene">
+                  <button type="submit" class="btn btn-success btn-sm">Analyze</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- KEGG Pathway Enrichment -->
+    <div class="results-section mb-5">
+      <h2>Gene Set Enrichment for Top 10 Genes</h2>
+      {% if top_kegg_pathway %}
+      <p><strong>{{ top_kegg_pathway['name'] }} (ID: {{ top_kegg_pathway['native'] }})</strong></p>
+      <p>Description: {{ top_kegg_pathway['description'] }}</p>
+      <p>P-value: {{ top_kegg_pathway['p_value'] }}</p>
+      {% else %}
+      <p>No KEGG Pathway Enrichment Found</p>
+      {% endif %}
+    </div>
+
+    <!-- Top 10 Associated Diseases -->
+    <div class="results-section mb-5">
+      <h2>Top 10 Associated Diseases</h2>
+      <p class="font-italic">
+        These are the top 10 diseases most closely associated with the input prompt according to LitGENE.
+      </p>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>Disease</th>
+              <th>Similarity Score</th>
+              <th>Find Citation</th>
+              <th>Word Importance</th>
+              <th>Analyze with LitGENE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for disease, score in top_diseases_data %}
+            <tr>
+              <td>
+                <a href="https://en.wikipedia.org/wiki/{{ disease | replace(' ', '_') }}" target="_blank">{{ disease }}</a>
+              </td>
+              <td class="{% if score > 0.65 %}text-success{% elif score > 0.5 %}text-warning{% else %}text-danger{% endif %}">
+                {{ (score * 100) | round(2) }}%
+              </td>
+              <td>
+                <form action="{{ url_for('find_citation') }}" method="post" onsubmit="showSpinner(true, '{{ disease }}')">
+                  <input type="hidden" name="text" value="{{ text }}">
+                  <input type="hidden" name="target_name" value="{{ disease }}">
+                  <input type="hidden" name="target_type" value="disease">
+                  <button type="submit" class="btn btn-info btn-sm">Find Citation</button>
+                </form>
+              </td>
+              <td>
+                <form action="{{ url_for('word_importance') }}" method="post" onsubmit="showSpinner(false)">
+                  <input type="hidden" name="text" value="{{ text }}">
+                  <input type="hidden" name="target_name" value="{{ disease }}">
+                  <input type="hidden" name="target_type" value="disease">
+                  <button type="submit" class="btn btn-warning btn-sm">Word Importance</button>
+                </form>
+              </td>
+              <td>
+                <form action="{{ url_for('analyze') }}" method="post" target="_blank">
+                  <input type="hidden" name="target_name" value="{{ disease }}">
+                  <input type="hidden" name="target_type" value="disease">
+                  <button type="submit" class="btn btn-success btn-sm">Analyze</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top 10 Associated Drugs -->
+    <div class="results-section mb-5">
+      <h2>Top 10 Associated Drugs</h2>
+      <p class="font-italic">
+        These are the top 10 drugs most closely associated with the input prompt according to LitGENE.
+      </p>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>Drug</th>
+              <th>Similarity Score</th>
+              <th>Find Citation</th>
+              <th>Word Importance</th>
+              <th>Analyze with LitGENE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for drug, score in top_drugs_data %}
+            <tr>
+              <td>
+                <a href="https://go.drugbank.com/unearth/q?searcher=drugs&query={{ drug }}" target="_blank">{{ drug }}</a>
+              </td>
+              <td class="{% if score > 0.65 %}text-success{% elif score > 0.5 %}text-warning{% else %}text-danger{% endif %}">
+                {{ (score * 100) | round(2) }}%
+              </td>
+              <td>
+                <form action="{{ url_for('find_citation') }}" method="post" onsubmit="showSpinner(true, '{{ drug }}')">
+                  <input type="hidden" name="text" value="{{ text }}">
+                  <input type="hidden" name="target_name" value="{{ drug }}">
+                  <input type="hidden" name="target_type" value="drug">
+                  <button type="submit" class="btn btn-info btn-sm">Find Citation</button>
+                </form>
+              </td>
+              <td>
+                <form action="{{ url_for('word_importance') }}" method="post" onsubmit="showSpinner(false)">
+                  <input type="hidden" name="text" value="{{ text }}">
+                  <input type="hidden" name="target_name" value="{{ drug }}">
+                  <input type="hidden" name="target_type" value="drug">
+                  <button type="submit" class="btn btn-warning btn-sm">Word Importance</button>
+                </form>
+              </td>
+              <td>
+                <form action="{{ url_for('analyze') }}" method="post" target="_blank">
+                  <input type="hidden" name="target_name" value="{{ drug }}">
+                  <input type="hidden" name="target_type" value="drug">
+                  <button type="submit" class="btn btn-success btn-sm">Analyze</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="/" class="btn btn-primary">Go Back</a>
+    </div>
+  </div>
+</section>
+
+<script>
+    function showSpinner(show, targetName) {
+        const overlay = document.getElementById('spinner-overlay');
+        const spinnerText = document.getElementById('spinner-text');
+        if (show) {
+            spinnerText.textContent = `Finding citation for ${targetName}...`;
+        } else {
+            spinnerText.textContent = 'Processing...';
+        }
+        overlay.style.display = 'flex';
+    }
+</script>
+  
+
+<!-- Spinner Overlay -->
+<div class="spinner-overlay" id="spinner-overlay">
+    <div class="spinner"></div>
+    <div class="spinner-text" id="spinner-text">Processing...</div>
+  </div>
+{% endblock %}

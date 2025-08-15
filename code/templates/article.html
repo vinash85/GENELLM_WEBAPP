@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Top Articles for {{ target_name }}{% endblock %}
+
+{% block content %}
+
+<section id="hero_home" class="min-vh-100 d-flex align-items-center text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3" data-aos="fade-up"><strong>LitGene</strong></h1>
+          <p data-aos="fade-left" class="text-white font-weight-semibold">Gene-Disease-Drug Association.</p>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  
+<section id="top-articles" class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1 class="text-primary mb-4">Top 5 Articles Associating {{ target_name }} to the Input Prompt</h1>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+              <tr>
+                <th>PMCID</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for index, row in articles.iterrows() %}
+              <tr>
+                <td>
+                  <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/{{ row['PMCID'] }}" target="_blank">
+                    {{ row['PMCID'] }}
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-12 text-center">
+        <a href="javascript:history.back()" class="btn btn-primary">Go Back</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

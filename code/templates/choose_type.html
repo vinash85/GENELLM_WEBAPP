@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Create Your Prompt - LitGENE{% endblock %}
+
+{% block content %}
+
+<section id="hero_home" class="min-vh-100 d-flex align-items-center text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3" data-aos="fade-up"><strong>LitGene</strong></h1>
+          <p data-aos="fade-left" class="text-white font-weight-semibold">Gene-Disease-Drug Association.</p>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section id="create-prompt" class="py-5">
+    <div class="container text-center">
+      <h1 class="mb-4">Step 1: Create Your Custom Prompt/Summary</h1>
+      <p class="mb-5">Select one of the options below to proceed.</p>
+      <div class="row">
+        <div class="col-md-3">
+          <form action="{{ url_for('choose_type') }}" method="post">
+            <div class="card text-center p-3">
+              <div class="card-body">
+                <h5 class="card-title">🧬 Gene</h5>
+                <p class="card-text">Select gene.</p>
+                <button type="submit" name="type" value="gene" class="btn btn-brand">Select</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-3">
+          <form action="{{ url_for('choose_type') }}" method="post">
+            <div class="card text-center p-3">
+              <div class="card-body">
+                <h5 class="card-title">🩺 Disease</h5>
+                <p class="card-text">Choose a disease to explore.</p>
+                <button type="submit" name="type" value="disease" class="btn btn-brand">Select</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-3">
+          <form action="{{ url_for('choose_type') }}" method="post">
+            <div class="card text-center p-3">
+              <div class="card-body">
+                <h5 class="card-title">💊 Drug</h5>
+                <p class="card-text">Select drug.</p>
+                <button type="submit" name="type" value="drug" class="btn btn-brand">Select</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-3">
+          <form action="{{ url_for('choose_type') }}" method="post">
+            <div class="card text-center p-3">
+              <div class="card-body">
+                <h5 class="card-title">✍️ Custom</h5>
+                <p class="card-text">Create a custom prompt.</p>
+                <button type="submit" name="type" value="custom" class="btn btn-brand">Select</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+{% endblock %}

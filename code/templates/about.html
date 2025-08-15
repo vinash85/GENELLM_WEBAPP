@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}About - LitGENE{% endblock %}
+
+{% block content %}
+
+
+<section id="hero_about" class="min-vh-100 d-flex align-items-center text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+            <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3" data-aos="fade-up"><strong>LitGene</strong></h1>
+
+          <div>
+            <a class="btn btn-brand" href="{{ url_for('choose_type') }}">Get Started</a>
+            <a class="btn btn-brand" href="https://www.avisahuai.com/">Tumor AI lab</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section id="technical-details" class="py-5 bg-light" data-aos="fade-left">
+  <div class="container">
+    <h2>Technical Details</h2>
+    <p>
+      LitGENE incorporates a pre-trained language model augmented with Gene Ontology (GO) knowledge through contrastive learning. This infusion of information enriches gene representations, helping the model achieve superior performance in gene-related tasks.
+    </p>
+    <p>
+      The model uses BiomedBERT, a BERT-based text encoder specifically trained on biomedical text corpora. Contrastive learning draws the representations of semantically similar genes closer together in the embedding space while pushing apart those of dissimilar genes.
+    </p>
+  </div>
+</section>
+
+<section id="key-features" class="py-5">
+  <div class="container">
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>High Accuracy:</strong> LitGENE shows high accuracy across eight gene-related benchmarks, often outperforming task-specific models.</li>
+      <li><strong>Zero-shot Learning:</strong> Demonstrates robust zero-shot learning capabilities for unseen gene annotations, making it versatile for a wide range of predictive tasks.</li>
+      <li><strong>Interpretability:</strong> The model's interpretability and multimodal strategic approach to mitigating inherent data biases bolster its utility and reliability in biomedical applications where interpretability is paramount.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="webserver-functionality" class="py-5 bg-light">
+  <div class="container">
+    <h2>Webserver Functionality</h2>
+    <p>
+      The LitGENE webserver provides an interactive platform for users to explore gene-disease-drug associations. The webserver is built using Flask, a lightweight WSGI web application framework in Python, which makes it easy to scale and extend.
+    </p>
+    <p>
+      Users can input a gene, disease, or drug of interest and receive a summary based on extensive biomedical literature. The webserver also features advanced functionalities such as:
+    </p>
+    <ul>
+      <li><strong>Predictive Analytics:</strong> Using the integrated LitGENE model, the webserver predicts top associated genes, diseases, and drugs, providing similarity scores and links to external resources.</li>
+      <li><strong>Interactive Analysis:</strong> Users can analyze the importance of specific words in the input summary and find relevant citations from the literature, with results displayed dynamically.</li>
+      <li><strong>Visualization:</strong> The platform offers visualization tools to highlight the significance of words within the context of the input summary, aiding in better interpretability of results.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="applications" class="py-5">
+  <div class="container">
+    <h2>Applications</h2>
+    <p>
+      LitGENE has been evaluated on various gene-related tasks, such as solubility prediction, chromatin state prediction, dosage sensitivity, subcellular localization, and transcription factor target identification. It has shown superior performance, demonstrating its broad applicability in genomics and biomedical research. We recommend using LitGENE software (link) for these predictions. Currently, the webserver only supports predictions of related biological entities from input prompts.
+    </p>
+  </div>
+</section>
+
+<section id="research-development" class="py-5 bg-light">
+  <div class="container">
+    <h2>Research and Development</h2>
+    <p>
+      LitGENE was developed by a team of researchers from the Department of Computer Science and the Comprehensive Cancer Center at The University of New Mexico. The team includes Ala Jararweh, Oladimeji Macaulay, David Arredondo, Olufunmilola M Oyebamiji, Luis Tafoya, Kushal Virupakshappa, and Avinash Sahu (Principal Investigator).
+    </p>
+    <p>
+      The findings affirm the complementary nature of unstructured text to structured databases in enhancing biomedical predictions while conscientiously addressing interpretability and bias for AI deployment in healthcare.
+    </p>
+  </div>
+</section>
+
+<section id="references" class="py-5">
+  <div class="container">
+    <h2>References</h2>
+    <ul>
+      <li>Bruce Alberts. Molecular biology of the cell. Garland science, 2017.</li>
+      <li>Haotian Cui, Chloe Wang, Hassaan Maan, Kuan Pang, Fengning Luo, and Bo Wang. scgpt: Towards building a foundation model for single-cell multi-omics using generative ai. bioRxiv, 2023.</li>
+      <li>Guilliermo Owen. Values of games with a priori unions. In Rudolf Henn and Otto Moeschlin (eds.), Mathematical Economics and Game Theory, 1977.</li>
+      <li>Thomas Stoeger, Martin Gerlach, Richard I. Morimoto, and Luı́s A. Nunes Amaral. Large-scale investigation of the reasons why potentially important genes are ignored. PLOS Biology, 16(9), 09 2018.</li>
+      <li>Jingcheng Du, Peilin Jia, YuLin Dai, Cui Tao, Zhongming Zhao, and Degui Zhi. Gene2vec: distributed representation of genes based on co-expression. BMC Genomics, 20(1), 2019.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="contact" class="py-5 bg-light text-center">
+  <div class="container">
+    <h2>Contact</h2>
+    <p>For more information, visit our <a href="https://www.avisahuai.com">website</a> or contact us at <a href="mailto:info@avisahuai.com">info@avisahuai.com</a>.</p>
+  </div>
+</section>
+{% endblock %}

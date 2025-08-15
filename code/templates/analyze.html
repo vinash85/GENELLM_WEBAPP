@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Word Importance for {{ target_name }}{% endblock %}
+
+{% block content %}
+
+<section id="hero_home" class="min-vh-100 d-flex align-items-center text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3" data-aos="fade-up"><strong>LitGene</strong></h1>
+          <p data-aos="fade-left" class="text-white font-weight-semibold">Gene-Disease-Drug Association.</p>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+<section id="word-importance" class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1 class="text-primary mb-4">Word Importance for {{ target_name }}</h1>
+        <p class="font-italic text-danger">This feature is currently experimental!</p>
+        <p class="font-italic">
+          It provides an approximate indication of word importance in the prompt. While post-hoc interpretability would
+          offer more accurate results, it is computationally intensive for web servers. Instead, we use cosine similarity
+          between the embeddings of each word in the prompt and the context embedding with prediction to estimate
+          approximate word importance.
+        </p>
+        <p class="font-italic">
+          For a more accurate word importance estimation, please contact us at
+          <a href="mailto:asahu@salud.unm.edu">asahu@salud.unm.edu</a>, and we will be happy to assist.
+        </p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="results-section mt-5 p-4 bg-light shadow-sm rounded">
+          <h2 class="text-center mb-4">Prompt</h2>
+          <div class="highlighted-text">
+            {{ highlighted_text|safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-12 text-center">
+        <a href="javascript:history.back()" class="btn btn-primary">Go Back</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

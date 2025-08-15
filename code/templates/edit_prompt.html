@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Edit and Submit Your Prompt - LitGENE{% endblock %}
+
+{% block content %}
+
+<section id="hero_home" class="min-vh-100 d-flex align-items-center text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3" data-aos="fade-up">
+                    <strong>LitGene</strong></h1>
+                <p data-aos="fade-left" class="text-white font-weight-semibold">Gene-Disease-Drug Association.</p>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="edit-prompt" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="mb-4">Step 3: Edit and Submit Your Prompt</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form action="{{ url_for('submit_prompt') }}" method="post" class="p-4 bg-light shadow-sm rounded" onsubmit="showSpinner(false)">
+                    <div class="form-group">
+                        <label for="text" class="font-weight-bold">Edit {{ member }} Prompt (optional):</label>
+                        <textarea id="text" name="text" rows="6" class="form-control"
+                            placeholder="Edit your prompt here...">{{ prompt }}</textarea>
+                    </div>
+                    <input type="hidden" name="type" value="{{ type }}">
+                    <input type="hidden" name="member" value="{{ member }}">
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-brand">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- <div class="row justify-content-center mt-4">
+            <div class="col-12 text-center">
+                <div class="spinner-overlay" id="spinner-overlay" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Processing...</span>
+                    </div>
+                    <div id="spinner-text" class="mt-3">LitGENE AI is processing your prompt...</div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="spinner-overlay" id="spinner-overlay">
+            <div class="spinner"></div>
+            <div id="spinner-text"></div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function showSpinner(show, targetName) {
+        const overlay = document.getElementById('spinner-overlay');
+        const spinnerText = document.getElementById('spinner-text');
+        if (show) {
+            spinnerText.textContent = `Finding citation for ${targetName}...`;
+        } else {
+            spinnerText.textContent = 'LitGENE AI is processing your prompt...';
+        }
+        overlay.style.display = 'flex';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdownBtn = document.querySelector(".dropbtn");
+        const dropdownContent = document.querySelector(".dropdown-content");
+
+        dropdownBtn.addEventListener("click", function () {
+            dropdownContent.classList.toggle("show");
+        });
+
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+                if (dropdownContent.classList.contains('show')) {
+                    dropdownContent.classList.remove('show');
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

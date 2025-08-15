@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback - LitGENE{% endblock %}
+
+{% block content %}
+
+
+<section id="hero_feedback" class="min-vh-100 d-flex align-items-center text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3" data-aos="fade-up"><strong>LitGene</strong></h1>
+
+                <div>
+                    <a class="btn btn-brand" href="{{ url_for('choose_type') }}">Get Started</a>
+                    <a class="btn btn-brand" href="https://www.avisahuai.com/">Tumor AI lab</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="feedback" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-4">We Value Your Feedback</h1>
+                <p class="text-center">
+                    We are committed to continuously improving LitGENE to better serve our users. Your feedback is
+                    invaluable. Please share your thoughts, suggestions, and any issues you may have encountered while
+                    using our platform.
+                </p>
+                <form action="{{ url_for('feedback') }}" method="post" class="mt-4">
+                    <div class="form-group">
+                        <label for="name">Name (Optional):</label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Your Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email (Required, if you would like a response):</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Your Email"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback_type">Feedback Type:</label>
+                        <select id="feedback_type" name="feedback_type" class="form-control">
+                            <option value="Suggestion">Suggestion</option>
+                            <option value="Issue">Issue</option>
+                            <option value="General Comment">General Comment</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message" rows="5" class="form-control"
+                            placeholder="Write your feedback here..."></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-brand">Send Feedback</button>
+                    </div>
+                </form>
+
+                <div class="message mt-4">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} mt-3" role="alert">{{ message }}</div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - LitGENE{% endblock %}
+
+{% block content %}
+
+
+<section id="hero_contact" class="min-vh-100 d-flex align-items-center text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+            <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3" data-aos="fade-up"><strong>LitGene</strong></h1>
+  
+          <div>
+            <a class="btn btn-brand" href="{{ url_for('choose_type') }}">Get Started</a>
+            <a class="btn btn-brand" href="https://www.avisahuai.com/">Tumor AI lab</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+<section id="contact" class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-center mb-4">Get in Touch with Us</h1>
+        <p class="text-center">
+          Our team is here to help and will respond to your inquiry as soon as possible. We are happy to assist and always welcome collaboration, especially from clinicians and researchers.
+        </p>
+        <form action="{{ url_for('contact') }}" method="post" class="mt-4">
+          <div class="form-group">
+            <label for="name">Name (Required):</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email (Required):</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Your Email" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject (Required):</label>
+            <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject of Your Message" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="5" class="form-control" placeholder="Write your message here..."></textarea>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-brand">Send Message</button>
+          </div>
+        </form>
+
+        <div class="message mt-4">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-3" role="alert">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+
+        <div class="mt-5 text-center">
+          <p><strong>Email:</strong> <a href="mailto:asahu@salud.unm.edu">asahu@salud.unm.edu</a></p>
+          <!-- Uncomment and update if needed -->
+          <!-- <p><strong>Address:</strong> Insert Physical Address if applicable</p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

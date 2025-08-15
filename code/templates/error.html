@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Error - Invalid Input{% endblock %}
+
+{% block content %}
+
+<section id="hero_home" class="min-vh-100 d-flex align-items-center text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3" data-aos="fade-up"><strong>LitGene</strong></h1>
+          <p data-aos="fade-left" class="text-white font-weight-semibold">Gene-Disease-Drug Association.</p>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  
+<section id="error-page" class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <div class="p-4 bg-light shadow-sm rounded">
+          <h1 class="text-danger mb-4">Invalid Input</h1>
+          <p class="mb-4">{{ error_message }}</p>
+          <a href="/" class="btn btn-primary">Go Back</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

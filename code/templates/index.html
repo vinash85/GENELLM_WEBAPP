@@ -1,68 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gene and Disease Similarity</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <header class="header">
-            <img src="{{ url_for('static', filename='logo1.jpg') }}" alt="Lab Logo" class="logo">
-            <h1>Gene-Disease Association</h1>
-        </header>
-        <form action="/predict" method="POST">
-            <div class="input-methods">
-                <div class="input-method">
-                    <h2>Enter Text</h2>
-                    <textarea name="text" placeholder="Enter gene or disease summary text here..."></textarea>
-                </div>
-                <div class="input-method">
-                    <h2>Or Select from Dropdown</h2>
-                    <label for="type">Select Type:</label>
-                    <select id="type" name="type">
-                        <option value="gene">Gene</option>
-                        <option value="disease">Disease</option>
-                    </select>
-                    <label for="name">Select Name:</label>
-                    <select id="name" name="name">
-                        
-                    </select>
-                </div>
-            </div>
-            <button type="submit">Submit</button>
-        </form>
+{% extends "base.html" %}
+
+{% block title %}Home - LitGENE{% endblock %}
+
+{% block content %}
+
+<section id="hero_home" class="min-vh-100 d-flex align-items-center text-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center align-items-center">
+        <h1 class="text-uppercase text-white font-weight-semibold display-1 mt-3 mr-3" data-aos="fade-up">
+          <strong>LitGene</strong>
+        </h1>
+        <!-- <img src="{{ url_for('static', filename='logow.png') }}" alt="LOGO" class="rotating-logo" style="width: 60px; height: auto;"> -->
+      </div>
+      <div class="col-12">
+        <p data-aos="fade-left" class="text-white font-weight-semibold">Gene-Disease-Drug Association.</p>
+        <div>
+          <a class="btn btn-brand mt5" href="{{ url_for('choose_type') }}">Get Started</a>
+          <a class="btn btn-brand" href="https://www.avisahuai.com/">Tumor AI lab</a>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const typeSelect = document.getElementById('type');
-            const nameSelect = document.getElementById('name');
-            const geneNames = {{ gene_names | safe }};
-            const diseaseNames = {{ disease_names | safe }};
 
-            function populateNames(names) {
-                nameSelect.innerHTML = '';
-                names.forEach(name => {
-                    const option = document.createElement('option');
-                    option.value = name;
-                    option.textContent = name;
-                    nameSelect.appendChild(option);
-                });
-            }
 
-            typeSelect.addEventListener('change', function() {
-                if (typeSelect.value === 'gene') {
-                    populateNames(geneNames);
-                } else {
-                    populateNames(diseaseNames);
-                }
-            });
 
-            // Initial population of gene names
-            populateNames(geneNames);
-        });
-    </script>
-</body>
-</html>
+<section id="introduction" class="py-5" data-aos="fade-right">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="text-center">Introduction</h2>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="hidden">
+              <p>
+                LitGENE is an interpretable transformer-based model that integrates textual information and gene
+                ontologies
+                through contrastive learning to refine gene representations. The approach combines gene annotation with
+                gene
+                description to predict gene functions and attributes. This is achieved by integrating contrastive
+                learning
+                within a large language model.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="{{ url_for('static', filename='fig1.png') }}" alt="Figure 1" class="img-fluid"
+              style="max-width: 40%; height: auto;">
+            <p class="mt-2"><em>Figure 1: Overview of LitGENE Model</em></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="inputs" class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="text-center">Inputs</h2>
+        <div class="hidden">
+
+          <p>
+            The website accepts descriptions of biomedical entities, such as genes/proteins, pathways, diseases, or
+            drugs. Researchers and clinicians can input scientific abstracts (in the prompt window) related to these
+            entities and receive predictions of related biological entities.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="outputs" class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="text-center">Outputs</h2>
+        <div class="hidden_right">
+          <p>
+            LitGENE provides predictions of biomedical entities related to the input prompt.
+          </p>
+
+
+          <ul>
+            <li>
+              <strong>For Example:</strong> <br>
+              Disease Input: Outputs include predicted risk genes associated with the disease and drugs that target
+              these genes, potentially modulating disease severity.
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="additional-outputs" class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="text-center">Additional Outputs</h2>
+        <div class="hidden">
+
+          <ul>
+            <li>
+              <strong>Similarity Scores:</strong>
+              Indicate the strength of the predicted relationships.
+            </li>
+            <li>
+              <strong>Word Importance:</strong>
+              Reports which words in the input are most important in determining the predicted relationships.
+            </li>
+            <li>
+              <strong>Citations:</strong>
+              Provides references from the published literature supporting the predicted relationships. References are
+              inferred by LitGENE from among 100,000 PubMed entries.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="start-prompt" class="py-5 text-center">
+  <div class="container">
+    <h2 class="text-center text-success">To Start, Create your Prompt</h2>
+    <a href="{{ url_for('choose_type') }}" class="btn btn-brand mt-4">Create Your Prompt</a>
+  </div>
+</section>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      console.log(entry);
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      } else {
+        entry.target.classList.remove('show');
+      }
+    });
+  });
+
+  const hiddenElements = document.querySelectorAll('.hidden');
+  hiddenElements.forEach((el) => observer.observe(el));
+
+  const hiddenRightElements = document.querySelectorAll('.hidden_right');
+  hiddenRightElements.forEach((el) => observer.observe(el));
+
+</script>
+<script>
+  const bounceObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('bounce');
+        setTimeout(() => {
+          entry.target.classList.remove('bounce');
+          bounceObserver.unobserve(entry.target);
+        }, 10000);
+      } else {
+        entry.target.classList.remove('bounce');
+      }
+    });
+  });
+
+  const promptButton = document.querySelector('.btn-brand.mt-4');
+  bounceObserver.observe(promptButton);
+
+  const getStartedButton = document.querySelector('.btn-brand.mt5');
+  bounceObserver.observe(getStartedButton);
+</script>
+
+{% endblock %}
