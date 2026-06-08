@@ -491,4 +491,42 @@ def enrich_genes(gene_list):
 
 
 if __name__ == '__main__':
-    app.run(debug=False,host='0.0.0.0', port=5000)
+    # Serve via gunicorn (production WSGI server) instead of the Werkzeug dev
+    # server. The dev server is single-process with an UNBOUNDED thread pool and
+    # no request supervision; under public scan/slowloris traffic it accumulated
+    # ~200 threads and permanently wedged (port stayed bound, but it stopped
+    # answering), requiring a manual restart.
+    #
+    # gunicorn fixes this with:
+    #   - a BOUNDED thread pool (--threads) so connections can't pile up,
+    #   - a supervising arbiter that kills and respawns a stuck worker (self-
+    #     healing instead of a permanent hang).
+    # We use a SINGLE worker because the BERT model + embedding CSVs are loaded
+    # at import time (one GPU model load per process) — multiple workers would
+    # multiply GPU/RAM usage. Re-exec keeps the unchanged entrypoint
+    # ("python3 app.py"); gunicorn then imports this module (not as __main__),
+    # so this block does not re-run.
+    import sys
+    gunicorn_argv = [
+        "gunicorn",
+        "--worker-class", "gthread",
+        "--workers", "1",
+        "--threads", "8",
+        "--timeout", "120",            # allow slow inference / PubMed fetches
+        "--graceful-timeout", "30",
+        "--bind", "0.0.0.0:5000",
+        "--certfile", "cert.pem",
+        "--keyfile", "key.pem",
+        "--access-logfile", "-",
+        "--error-logfile", "-",
+        "app:app",
+    ]
+    try:
+        os.execvp("gunicorn", gunicorn_argv)
+    except FileNotFoundError:
+        # gunicorn not installed — fall back to the dev server so the site still
+        # comes up (less robust; `pip install gunicorn` to get the real fix).
+        print("WARNING: gunicorn not found, falling back to Werkzeug dev server",
+              file=sys.stderr)
+        app.run(debug=False, host='0.0.0.0', port=5000,
+                ssl_context=('cert.pem', 'key.pem'))
