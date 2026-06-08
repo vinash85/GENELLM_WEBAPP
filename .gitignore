@@ -4,3 +4,4 @@ genellmapp/
 venv/
 myenv/
 *.sh
+scripts/*.log
