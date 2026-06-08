@@ -39,3 +39,4 @@ werkzeug==3.0.3
 zipp==3.19.2
 google-cloud-pubsub==2.21.5
 nltk
+gunicorn==22.0.0
