@@ -5,3 +5,8 @@ venv/
 myenv/
 *.sh
 scripts/*.log
+
+# keep the Azure deploy script tracked despite the *.sh rule above
+!deploy/azure/build_and_push.sh
+# never commit TLS certs/keys (e.g. code/cert.pem, code/key.pem)
+*.pem

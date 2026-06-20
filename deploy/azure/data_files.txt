@@ -1,0 +1,11 @@
+# Data files baked into the Azure image -- exactly the ones app.py loads.
+# (The full /data/web_data dir is 3.7 GB; these 8 are ~1.05 GB.)
+# Set INCLUDE_ALL_DATA=1 when running build_and_push.sh to bake everything.
+disease_embeddings_merged.csv
+drug_embeddings_merged.csv
+gene_embeddings_merged.csv
+high_disease_pubchem_similarity.csv
+high_drug_pubchem_similarity.csv
+high_gene_pubchem_similarity.csv
+high_new_article_embeddings.csv
+state_dict_0.pth

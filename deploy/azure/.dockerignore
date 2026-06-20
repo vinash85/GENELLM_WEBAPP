@@ -1,0 +1,16 @@
+# Never bake TLS private keys into the image. TLS is terminated at the Azure
+# front end (Option B), so the container serves plain HTTP and needs no cert.
+code/cert.pem
+code/key.pem
+**/*.pem
+
+# Never bake secrets (SMTP creds live here). Inject as Azure env vars instead.
+.env
+**/.env
+
+# Build / runtime cruft
+**/__pycache__
+**/*.pyc
+*.log
+**/*.log
+.git
